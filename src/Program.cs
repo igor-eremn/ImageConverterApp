@@ -3,7 +3,6 @@
 //TODO: add gui for the application
 
 using System;
-using System.IO;
 using ImageConverterApp.Features;
 
 namespace ImageConverterApp
@@ -12,21 +11,50 @@ namespace ImageConverterApp
     {
         static void Main(string[] args)
         {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Welcome to Image Converter App");
+                Console.WriteLine("Please choose an option:");
+                Console.WriteLine("1. Convert an image file (jpg/png)");
+                Console.WriteLine("2. Exit");
+                Console.Write("Your choice: ");
+
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        ConvertImageOption();
+                        break;
+                    case "2":
+                        Console.WriteLine("Exiting the application. Goodbye!");
+                        return;
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+
+                Console.WriteLine("Press any key to return to the menu...");
+                Console.ReadKey();
+            }
+        }
+
+        static void ConvertImageOption()
+        {
+            Console.Clear();
             Console.WriteLine("Image Converter");
+
             Console.Write("Enter the path of the image file to convert: ");
             string inputFilePath = Console.ReadLine();
 
             Console.Write("Choose output format (jpg/png): ");
             string outputFormat = Console.ReadLine()?.ToLower();
 
-            string downloadsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-
             try
             {
                 var imageConverter = new ImageConverter();
-                string outputFilePath = imageConverter.ConvertImage(inputFilePath, outputFormat, downloadsFolder);
-
-                Console.WriteLine($"Image converted successfully and saved to: {outputFilePath}");
+                imageConverter.ConvertImage(inputFilePath, outputFormat);
             }
             catch (Exception ex)
             {

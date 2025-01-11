@@ -6,12 +6,13 @@ namespace ImageConverterApp.Features
 {
     public class ImageConverter
     {
-        public string ConvertImage(string inputFilePath, string outputFormat, string outputFolder)
+        public void ConvertImage(string inputFilePath, string outputFormat)
         {
             if (!File.Exists(inputFilePath))
                 throw new FileNotFoundException("The specified file does not exist.");
 
-            string outputFilePath = Path.Combine(outputFolder, Path.GetFileNameWithoutExtension(inputFilePath) + "." + outputFormat);
+            string downloadsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+            string outputFilePath = Path.Combine(downloadsFolder, Path.GetFileNameWithoutExtension(inputFilePath) + "." + outputFormat);
 
             using var image = new MagickImage(inputFilePath);
             image.Format = outputFormat switch
@@ -22,7 +23,8 @@ namespace ImageConverterApp.Features
             };
 
             image.Write(outputFilePath);
-            return outputFilePath;
+
+            Console.WriteLine($"Image converted successfully and saved to: {outputFilePath}");
         }
     }
 }
