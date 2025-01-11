@@ -18,9 +18,14 @@ namespace ImageConverterApp
                 Console.WriteLine("Please choose an option:");
                 Console.WriteLine("1. Convert an image file (jpg/png)");
                 Console.WriteLine("2. Exit");
-                Console.Write("Your choice: ");
+                Console.Write("Your choice (default is 1): ");
 
                 string choice = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(choice))
+                {
+                    choice = "1";
+                }
 
                 switch (choice)
                 {
@@ -45,8 +50,26 @@ namespace ImageConverterApp
             Console.Clear();
             Console.WriteLine("Image Converter");
 
-            Console.Write("Enter the path of the image file to convert: ");
-            string inputFilePath = Console.ReadLine();
+            string inputFilePath;
+            while (true)
+            {
+                Console.Write("Enter the path of the image file to convert ('m' for menu): ");
+                inputFilePath = Console.ReadLine();
+
+                if (string.Equals(inputFilePath, "m", StringComparison.OrdinalIgnoreCase))
+                {
+                    return;
+                }
+
+                if (File.Exists(inputFilePath))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("The specified file does not exist. Please try again.");
+                }
+            }
 
             Console.Write("Choose output format (jpg/png): ");
             string outputFormat = Console.ReadLine()?.ToLower();
