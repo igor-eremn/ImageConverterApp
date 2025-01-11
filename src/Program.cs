@@ -2,7 +2,6 @@
 using System.IO;
 using ImageMagick;
 
-
 //TODO: allow user to select specific folder and convert all images in that folder
 //TODO: get dimensions of the image and allow user to resize the image
 //TODO: add gui for the application
