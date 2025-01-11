@@ -1,10 +1,10 @@
-﻿using System;
-using System.IO;
-using ImageMagick;
-
-//TODO: allow user to select specific folder and convert all images in that folder
+﻿//TODO: allow user to select specific folder and convert all images in that folder
 //TODO: get dimensions of the image and allow user to resize the image
 //TODO: add gui for the application
+
+using System;
+using System.IO;
+using ImageConverterApp.Features;
 
 namespace ImageConverterApp
 {
@@ -20,25 +20,12 @@ namespace ImageConverterApp
             string outputFormat = Console.ReadLine()?.ToLower();
 
             string downloadsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-            string outputFilePath = Path.Combine(downloadsFolder, Path.GetFileNameWithoutExtension(inputFilePath) + "." + outputFormat);
 
             try
             {
-                if (!File.Exists(inputFilePath))
-                {
-                    Console.WriteLine("The specified file does not exist.");
-                    return;
-                }
+                var imageConverter = new ImageConverter();
+                string outputFilePath = imageConverter.ConvertImage(inputFilePath, outputFormat, downloadsFolder);
 
-                using var image = new MagickImage(inputFilePath);
-                image.Format = outputFormat switch
-                {
-                    "jpg" or "jpeg" => MagickFormat.Jpeg,
-                    "png" => MagickFormat.Png,
-                    _ => throw new ArgumentException("Unsupported output format")
-                };
-
-                image.Write(outputFilePath);
                 Console.WriteLine($"Image converted successfully and saved to: {outputFilePath}");
             }
             catch (Exception ex)
